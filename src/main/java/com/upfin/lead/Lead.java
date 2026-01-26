@@ -15,13 +15,10 @@ public class Lead {
     @Column(unique = true)
     private String email;
 
+    // 🔹 construtor vazio (obrigatório para JPA)
     public Lead() {}
 
-    public Lead(String nome, String email) {
-        this.nome = nome;
-        this.email = email;
-    }
-
+    // 🔹 getters
     public Long getId() {
         return id;
     }
@@ -32,5 +29,14 @@ public class Lead {
 
     public String getEmail() {
         return email;
+    }
+
+    // 🔹 setters (ESTAVAM FALTANDO)
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
