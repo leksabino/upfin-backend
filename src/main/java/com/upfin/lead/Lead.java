@@ -12,13 +12,11 @@ public class Lead {
 
     private String nome;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    // 🔹 construtor vazio (obrigatório para JPA)
     public Lead() {}
 
-    // 🔹 getters
     public Long getId() {
         return id;
     }
@@ -31,7 +29,6 @@ public class Lead {
         return email;
     }
 
-    // 🔹 setters (ESTAVAM FALTANDO)
     public void setNome(String nome) {
         this.nome = nome;
     }

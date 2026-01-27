@@ -2,6 +2,7 @@ package com.upfin.controller;
 
 import com.upfin.lead.Lead;
 import com.upfin.lead.LeadRepository;
+import com.upfin.lead.LeadRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,21 +21,17 @@ public class LeadController {
     }
 
     @PostMapping
-    public ResponseEntity<?> criar(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> criar(@RequestBody LeadRequest request) {
 
-        String nome = body.get("nome");
-        String email = body.get("email");
-
-        if (repository.findByEmail(email).isPresent()) {
-            // 👉 409 Conflict
+        if (repository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body(Map.of("message", "E-mail já cadastrado"));
         }
 
         Lead lead = new Lead();
-        lead.setNome(nome);
-        lead.setEmail(email);
+        lead.setNome(request.getNome());
+        lead.setEmail(request.getEmail());
 
         repository.save(lead);
 
