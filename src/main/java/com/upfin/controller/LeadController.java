@@ -20,6 +20,11 @@ public class LeadController {
         this.repository = repository;
     }
 
+    @GetMapping("/ping")
+    public String ping() {
+        return "UPFIN BACKEND OK";
+    }
+
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody LeadRequest request) {
 
