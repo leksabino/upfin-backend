@@ -1,13 +1,11 @@
 package com.upfin.controller;
 
-import com.upfin.lead.Lead;
-import com.upfin.lead.LeadRepository;
-import com.upfin.lead.LeadRequest;
-import org.springframework.http.HttpStatus;
+import com.upfin.lead.Lead;          // ✅ IMPORT CORRETO
+import com.upfin.repository.LeadRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/leads")
@@ -20,28 +18,19 @@ public class LeadController {
         this.repository = repository;
     }
 
-    @GetMapping("/ping")
-    public String ping() {
-        return "UPFIN BACKEND OK";
-    }
-
     @PostMapping
-    public ResponseEntity<?> criar(@RequestBody LeadRequest request) {
+    public ResponseEntity<?> criar(@RequestBody Lead lead) {
 
-        if (repository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "E-mail já cadastrado"));
+        if (repository.existsByEmail(lead.getEmail())) {
+            return ResponseEntity.status(409)
+                    .body(java.util.Map.of("message", "E-mail já cadastrado"));
         }
 
-        Lead lead = new Lead();
-        lead.setNome(request.getNome());
-        lead.setEmail(request.getEmail());
+        return ResponseEntity.status(201).body(repository.save(lead));
+    }
 
-        repository.save(lead);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(lead);
+    @GetMapping
+    public List<Lead> listar() {
+        return repository.findAll();
     }
 }

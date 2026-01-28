@@ -1,9 +1,8 @@
-package com.upfin.lead;
+package com.upfin.repository;
 
+import com.upfin.lead.Lead;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface LeadRepository extends JpaRepository<Lead, Long> {
-    Optional<Lead> findByEmail(String email);
+    boolean existsByEmail(String email);
 }
