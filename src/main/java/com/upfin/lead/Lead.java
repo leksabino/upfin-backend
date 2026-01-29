@@ -1,6 +1,5 @@
 package com.upfin.lead;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,7 +10,6 @@ public class Lead {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonAlias({ "name", "nome" }) // 🔥 CHAVE DA SOLUÇÃO
     private String nome;
 
     @Column(unique = true, nullable = false)
