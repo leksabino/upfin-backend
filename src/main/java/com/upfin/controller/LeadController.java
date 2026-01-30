@@ -32,17 +32,34 @@ public class LeadController {
     }
 
     // 🔐 ADMIN – LISTAR LEADS
-    @GetMapping
-    public ResponseEntity<List<Lead>> listar(
-            @RequestHeader(value = "X-ADMIN-TOKEN", required = false) String token
-    ) {
+    @GetMapping("/export")
+    public void exportarCsv(
+            @RequestHeader(value = "X-ADMIN-TOKEN", required = false) String token,
+            jakarta.servlet.http.HttpServletResponse response
+    ) throws Exception {
 
         String correto = System.getenv("ADMIN_TOKEN");
 
         if (correto == null || token == null || !correto.equals(token)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            response.setStatus(401);
+            return;
         }
 
-        return ResponseEntity.ok(repository.findAll());
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=leads-upfin.csv");
+
+        var writer = response.getWriter();
+        writer.println("id,nome,email,created_at");
+
+        for (var lead : repository.findAll()) {
+            writer.println(
+                    lead.getId() + "," +
+                            (lead.getNome() == null ? "" : lead.getNome()) + "," +
+                            lead.getEmail() + "," +
+                            lead.getCreatedAt()
+            );
+        }
+
+        writer.flush();
     }
 }
